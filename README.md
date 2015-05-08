@@ -8,6 +8,7 @@ Team members:
 * Prashant Gupta
 
 Files included:
+
 0. Prototype screencast
 0. User feedback video
 0. Card sort video

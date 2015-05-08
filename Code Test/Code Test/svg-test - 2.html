@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title></title>
+  <script  src="d3.min.js">
+    
+  </script>
+  <script src="jquery-1.11.3.min.js"></script>
+  <style>
+    svg path:hover {
+    fill: red !important;
+}
+  </style>
+</head>
+<body>
+  <p>
+  <label for="fillHeight" 
+         style="display: inline-block; width: 240px; text-align: right">
+         Year = <span id="fillHeight-value">…</span>
+  </label>
+  <input type="range" min="1910" max="2010" id="fillHeight">
+  <img class="svg" src="worldHigh.svg"/>
+  <script>
+     var boundingX = 0
+                             var boundingY = 0
+      var sideCanvas = d3.select("body")
+          .append("svg")
+          .attr("height", "30%")
+          .attr("y", "1000")
+          .attr("viewBox", "0 0 600 600");
+    
+    
+     // when the input range changes update the circle 
+d3.select("#fillHeight").on("input", function() {
+  update(+this.value);
+});
+var forestFill = [55, 55,55,55,55,55,55,55,55,55,55,54,54,54,54,54,54,54,54,54,54,54,54,53,51,51,51,51,50,50,50,50,50,50,50,50, 47,47,47,47,47,47,47,47,47,47,47,47,47,47,46,46,46,46,46,46,45,45,45,40,40,40,40,40,40,40,40,35,35,35,35,35,35,35,29,29,29,29,29,29,25,25,25,25,25,21,21,21,21,21,21,19,19,19,19,19,18,18,17,16, 15];
+   // Initial starting radius of the circle 
+    update(1900);
+    var currentYear
+    function update(fillHeight) {
+      currentYear = fillHeight
+  // adjust the text on the range slider
+  d3.select("#fillHeight-value").text(fillHeight);
+  d3.select("#fillHeight").property("value", fillHeight);
+      
+  
+  sideCanvas.selectAll("rect") 
+  .attr("y", function(d, i){
+    
+      console.log("rect"+i+fillHeight);
+     var curPath = document.getElementById("selectedPath");
+    var ht = curPath.getBBox().height;
+    var py= curPath.getBBox().y
+         var rectangleScale = d3.scale.linear()
+        .domain([0, 100])
+        .range([0, ht]);
+     return py+ht - rectangleScale(forestFill[fillHeight-1900]);
+    })
+ 
+    
+}
+     jQuery(document).ready(function() {
+                /*
+                 * Replace all SVG images with inline SVG
+                 */
+                    jQuery('img.svg').each(function(){
+                        var $img = jQuery(this);
+                        var imgID = $img.attr('id');
+                        var imgClass = $img.attr('class');
+                        var imgURL = $img.attr('src');
+                        jQuery.get(imgURL, function(data) {
+                            // Get the SVG tag, ignore the rest
+                            var $svg = jQuery(data).find('svg');
+                
+                            // Add replaced image's ID to the new SVG
+                            if(typeof imgID !== 'undefined') {
+                                $svg = $svg.attr('id', imgID);
+                            }
+                            // Add replaced image's classes to the new SVG
+                            if(typeof imgClass !== 'undefined') {
+                                $svg = $svg.attr('class', imgClass+' replaced-svg');
+                            }
+                            
+                            // Remove any invalid XML tags as per http://validator.w3.org
+                            $svg = $svg.removeAttr('xmlns:a');
+                            
+                            // Replace image with new SVG
+                            $img.replaceWith($svg);
+                            
+                            // Add an handler
+                            jQuery('path').each(function() {
+                       jQuery(this).click(function() {
+                         sideCanvas.selectAll("*").remove();
+                        sideCanvas.append("path")
+                         .attr("id", "selectedPath2")
+                         .attr("d", jQuery(this).attr("d"))
+                         .attr("fill", "white")
+                          .attr("stroke", "black")
+                         
+                          var curPath = document.getElementById("selectedPath2");
+                         var pathBBox =  curPath.getBBox()
+                         var ht = pathBBox .height;
+                         var wt = pathBBox .width
+                     
+                         var px = pathBBox.x
+                         var py = pathBBox.y
+                        sideCanvas.append("clipPath")
+                           .attr("id", "rectClip2")
+                           .append("rect")
+                           .attr("width", wt)
+                           .attr("height", ht)
+                           .attr("x", px)
+                           .attr("y", py)
+                         sideCanvas.append("defs")
+                           .append("pattern")
+                           .attr("width", 4)
+                           .attr("height", 4)
+                           .attr("x", px)
+                           .attr("y", py)
+                           .attr("id", "greenFill")
+                           .append("image")
+                           .attr("width", "100%")
+                           .attr("height", "100%")
+                           .attr("xlink:href", "green.jpg")
+                           
+                          sideCanvas.append("path")
+                            .attr("id", "selectedPath")
+                            .attr("d", jQuery(this).attr("d"))
+                            .attr("fill", "green")
+                            .attr("clip-path","url(#rectClip2)")
+                       
+                        sideCanvas.selectAll("path")
+                          .attr("transform",function(){
+                                var bbox = this.getBBox()
+                                    boundingX=bbox.x;
+                                    boundingY=bbox.y;
+                                    return "translate("+-1*bbox.x.toString()+","+-1*bbox.y.toString()+")"
+                          
+                          
+                        }) 
+                         
+                          update(currentYear);
+                       });                       
+                           });
+                        });
+    
+                    });
+   });
+   </script>
+     
+
+</body>
+</html>

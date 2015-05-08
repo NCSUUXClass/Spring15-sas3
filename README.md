@@ -2,16 +2,12 @@
 Project repository for the SAS Infographics project for CSC 591: Special Topics in computer science - User Experience
 
 Team members: 
-Sushil Ganesh
-
-Shraddha Naik
-
-Sayali Mirajkar
-
-Prashant Gupta
+* Sushil Ganesh
+* Shraddha Naik
+* Sayali Mirajkar
+* Prashant Gupta
 
 Files included:
-
 0. Prototype screencast
 0. User feedback video
 0. Card sort video
